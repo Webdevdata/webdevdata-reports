@@ -20,11 +20,12 @@ csvcut -H -c 4 $CSV | tr -s ' ,";' ' ' |
   sed -e 's/ *= */=/g' -e 's/^ *//g' -e 's/ *$//g' -e 's/\.0//g' |
   sort > /tmp/viewport_values
 
-cat /tmp/viewport_values | uniq -c | sort -nr | head -n 10
+cat /tmp/viewport_values | uniq -c | sort -nr | head -n 10 | sed -e 's/^/ * /g'
 
 echo
 echo "# Top 10 normalised viewport properties"
 echo
 
-cat /tmp/viewport_values | tr ' ' "\n" | sort | uniq -c | sort -nr | head -n 10
+cat /tmp/viewport_values | tr ' ' "\n" | sort | uniq -c | sort -nr |
+  head -n 10 | sed -e 's/^/ * /g'
 

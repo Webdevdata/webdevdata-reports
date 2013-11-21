@@ -44,7 +44,7 @@ for tag in $(cat /tmp/used_app_name_tags | awk '{print $2}' | head -n 5)
 do
   echo "### Tag: $tag"
   echo "\`\`\`"
-  csvgrep -H -c3 -m "$tag" $CSV |csvcut -H -c 4 | awk '{print length($0)}' | csvstat -H -d,
+  csvgrep -c3 -m "$tag" $CSV |csvcut -H -c 4 | awk '{print length($0)}' | csvstat -H -d,
   echo "\`\`\`"
   echo
 done
