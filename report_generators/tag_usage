@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+CSV=csv_out/all_tags.csv
+
+echo "# Tag usage"
+
+echo
+echo "## Top 20 tags used"
+echo
+
+awk -F, '{print $2}' $CSV | sort | uniq -c | sort -nr > /tmp/tags_used
+
+cat /tmp/tags_used | head -n 30 | sed -e 's/^/ * /g'
+
+echo
+echo "## csvstat on all_tags.csv"
+echo
+
+echo "\`\`\`"
+csvstat -H csv_out/all_tags.csv
+echo "\`\`\`"
+

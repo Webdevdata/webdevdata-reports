@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+WEBDEVDATA_DIR=${1:-$WEBDEVDATA_DIR}
+WDDTOOS_DIR=${WDDTOOS_DIR:-/usr/local/bin}
+WDD_TAG_COUNT=$WDDTOOS_DIR/wdd_tag_count
+
+find $WEBDEVDATA_DIR/ -name "*tml.txt" | $WDD_TAG_COUNT > /tmp/all_tags.csv
+
+iconv -c -f MAC -t UTF8 /tmp/all_tags.csv
+
