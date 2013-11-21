@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+csvgrep --maxfieldsize 999999 -c3 -m "stylesheet" csv_out/link_tags.csv
+

@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+CSV_STYLE=csv_out/link_tags_stylesheet.csv
+CSV=csv_out/link_tags_stylesheet_media.csv
+
+echo "# linked stylesheets with media"
+echo
+
+echo -n "Total sites with stylesheets tag: "
+echo "$(cat $CSV_STYLE | awk -F, '$1 ~ /html.txt/ {print $1}' | sort | uniq | wc -l)"
+echo
+
+echo -n "Total sites with stylesheets tag with a media attribute: "
+echo "$(cat $CSV | awk -F, '$1 ~ /html.txt/ {print $1}' | sort | uniq | wc -l)"
+echo
+
+#echo -n "Total sites with stylesheets tag with a media attribute: "
+#echo "$(cat $CSV | awk -F, '$1 ~ /html.txt/ {print $1}' | sort | uniq | wc -l)"
+#echo
+
+echo
+echo "# Most common *-width usage in media queries"
+echo
+
+csvcut -c5 csv_out/link_tags_stylesheet_media.csv |
+  grep width | tr -d '\t"' | sed -e 's/^ *//g' -e 's/ *$//g' |
+  sed -e 's/, */, /g' -e 's/: */: /g' | tr '(),' '\n' |
+  grep width: | sort | uniq -c | sort -rn | sed -e 's/^/ * /g'
+
+echo
+echo "# Most common px values"
+echo
+
+csvcut -c5 csv_out/link_tags_stylesheet_media.csv |
+  grep width | tr -d '\t"' | sed -e 's/^ *//g' -e 's/ *$//g' |
+  sed -e 's/, */, /g' -e 's/: */: /g' | tr -s '() :' '\n' |
+  grep px | sort | uniq -c | sort -rn -k 2 | sed -e 's/^/ * /g'
+

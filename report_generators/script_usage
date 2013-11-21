@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+CSV=csv_out/all_tags.csv
+
+echo "# Script usage"
+
+echo
+echo "## csvstat on script_tags.csv"
+echo
+
+echo "\`\`\`"
+csvstat -H csv_out/script_tags.csv
+echo "\`\`\`"
+
