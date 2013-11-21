@@ -5,7 +5,7 @@ WDDTOOS_DIR=${WDDTOOS_DIR:-/usr/local/bin}
 WDD_SELECT=$WDDTOOS_DIR/wdd_select
 SELECTOR="meta[name]"
 
-find $WEBDEVDATA_DIR -name "*tml.txt" |
+find $WEBDEVDATA_DIR/ -name "*tml.txt" |
   $WDD_SELECT -attrs=name,content "$SELECTOR" > /tmp/meta_tags.csv
 
 iconv -c -f MAC -t UTF8 /tmp/meta_tags.csv
