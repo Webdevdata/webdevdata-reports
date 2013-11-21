@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+CSV=csv_out/meta_tags_viewport.csv
+
+echo "# Viewport information"
+echo
+
+echo -n "Total sites with viewport tag: "
+echo "$(cat $CSV | awk -F, '$1 ~ /html.txt/ {print $1}' | wc -l)"
+echo
+
+echo -n "Total sites with more than one viewport tag: "
+echo "$(awk -F, '$1 ~ /html.txt/ {print $1}' $CSV | sort | uniq -c | awk '$1 != 1' | wc -l)"
+echo
+
+echo
+echo "# Top 10 normalised viewport values"
+echo
+
+csvcut -H -c 4 $CSV | tr -s ' ,";' ' ' |
+  sed -e 's/ *= */=/g' -e 's/^ *//g' -e 's/ *$//g' -e 's/\.0//g' |
+  sort > /tmp/viewport_values
+
+cat /tmp/viewport_values | uniq -c | sort -nr | head -n 10
+
+echo
+echo "# Top 10 normalised viewport properties"
+echo
+
+cat /tmp/viewport_values | tr ' ' "\n" | sort | uniq -c | sort -nr | head -n 10
+

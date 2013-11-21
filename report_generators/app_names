@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+CSV=csv_out/meta_tags_application_names.csv
+
+echo "# App names reports"
+echo
+
+echo "## Summary"
+echo
+
+cat $CSV | awk -F, '$1 ~ /html.txt/ {print $1}' |
+  sort | uniq -c > /tmp/matched_files
+
+echo -n "Total files with title or name meta tags:"
+echo "$(cat /tmp/matched_files | wc -l)"
+echo
+
+cat /tmp/matched_files |
+  awk '$1 != "1"' > /tmp/files_with_more_than_one_title_tag
+
+echo -n "Files with more than one title tag: "
+echo "$(cat /tmp/files_with_more_than_one_title_tag | wc -l)"
+
+echo
+echo "## Top tag combinations"
+echo
+
+cat /tmp/files_with_more_than_one_title_tag |
+  awk '{print $2}' |
+  parallel "grep {} $CSV | awk -F, '{print \$3}' | sort | tr '\\n' ' ' | xargs echo" |
+  sort | uniq -c | sort -nr | sed -e 's/^/ * /g'
+
+echo
+echo "## Top used tags"
+echo
+
+cat $CSV | awk -F, '$1 ~ /html.txt/ {print $3}' |
+  sort | uniq -c | sort -nr | tee /tmp/used_app_name_tags | sed -e 's/^/ * /g'
+
+echo
+echo "## Content length stats for top 5 tags"
+echo
+
+for tag in $(cat /tmp/used_app_name_tags | awk '{print $2}' | head -n 5)
+do
+  echo "### Tag: $tag"
+  echo "\`\`\`"
+  csvgrep -H -c3 -m "$tag" $CSV |csvcut -H -c 4 | awk '{print length($0)}' | csvstat -H -d,
+  echo "\`\`\`"
+  echo
+done
+

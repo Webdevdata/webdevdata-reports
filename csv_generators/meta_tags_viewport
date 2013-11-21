@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+csvgrep --maxfieldsize 999999 -c3 -r "viewport" csv_out/meta_tags.csv
+

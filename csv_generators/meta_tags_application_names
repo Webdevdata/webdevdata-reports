@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+SELECTOR="(application-name|title|apple-mobile-web-app-title|site_name|name|og:title|shareaholic:site_name|og:site_name)"
+
+csvgrep --maxfieldsize 999999 -c3 -r "$SELECTOR" csv_out/meta_tags.csv
+
